@@ -24,6 +24,7 @@ export default (state = {}, action) => {
               ...article,
               favorited: action.payload.article.favorited,
               favoritesCount: action.payload.article.favoritesCount
+              
             };
           }
           return article;

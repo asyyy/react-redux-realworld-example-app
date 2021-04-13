@@ -27,8 +27,10 @@ const ArticlePreview = props => {
   const handleClick = ev => {
     ev.preventDefault();
     if (article.favorited) {
+      console.log("unfavorite")
       props.unfavorite(article.slug);
     } else {
+      console.log("favorite")
       props.favorite(article.slug);
     }
   };
@@ -52,6 +54,7 @@ const ArticlePreview = props => {
         <div className="pull-xs-right">
           <button className={favoriteButtonClass} onClick={handleClick}>
             <i className="ion-heart"></i> {article.favoritesCount}
+            
           </button>
         </div>
       </div>

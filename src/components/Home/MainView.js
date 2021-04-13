@@ -70,7 +70,7 @@ const MainView = props => {
     <div className="col-md-9">
       <div className="feed-toggle">
         <ul className="nav nav-pills outline-active">
-
+          
           <YourFeedTab
             token={props.token}
             tab={props.tab}
@@ -79,7 +79,7 @@ const MainView = props => {
           <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
 
           <TagFilterTab tag={props.tag} />
-
+          
         </ul>
       </div>
 
