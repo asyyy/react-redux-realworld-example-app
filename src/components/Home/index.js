@@ -52,10 +52,12 @@ class Home extends React.Component {
 
         <div className="container page">
           <div className="row">
-            <div className="col-md-2">       
-                <NyTimes />          
+            <div className="col-md-3">       
+                <div className="sidebar">
+                  <NyTimes />          
+                </div>
             </div>
-            <div className="col-lg-8">
+            <div className="col-lg-7">
               <MainView />
               </div>
             <div className="col-md-2">
