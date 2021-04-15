@@ -51,25 +51,13 @@ class Home extends React.Component {
       <div className="home-page">
         <Banner token={this.props.token} appName={this.props.appName} />
 
-        <div className="container page">
+        <div className="container">
           <div className="row">
-            <div className="col-md-3">       
-                <div className="sidebar">
-                  <NyTimes />          
-                </div>
+            <div className="col-md-4">                 
+                <NyTimes />                         
             </div>
-            <div className="col-lg-7">
-              <MainView />
-              </div>
-            <div className="col-md-2">
-              <div className="sidebar">
-                <p>Popular Tags</p>
-
-                <Tags
-                  tags={this.props.tags}
-                  onClickTag={this.props.onClickTag}
-                />
-              </div>
+            <div style={{marginLeft:'3%'}} className="col-sm-7"> 
+              <MainView />          
             </div>
           </div>
         </div>
