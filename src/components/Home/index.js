@@ -5,6 +5,7 @@ import Tags from "./Tags";
 import agent from "../../agent";
 import { connect } from "react-redux";
 import NyTimes from "./newYorkTime";
+import 'semantic-ui-css/semantic.min.css'
 
 import {
   HOME_PAGE_LOADED,
