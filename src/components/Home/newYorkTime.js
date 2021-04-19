@@ -18,29 +18,29 @@ class NyTimes extends React.Component {
       activeItem: "Recent",
     };
   }
-
+  
   componentDidMount() {
     this.loadArticles(this.state.activeItem);
   }
+  /**
+   * 
+   * @param {*} category type de l'articles
+   * @returns String, le lien de l'api vers le NY Times selon le type de l'article
+   */
   makeApiLink = (category) => {
     this.setState({ activeItem: category });
     switch (category) {
       case "Popular":
-        console.log(" make popular");
         return (
           "https://api.nytimes.com/svc/mostpopular/v2/viewed/7.json?api-key=" +
           process.env.REACT_APP_API_KEY
         );
-
-      case "Recent":
-        console.log(" make recent");
+      case "Recent":      
         return (
           "https://api.nytimes.com/svc/news/v3/content/nyt/world.json?api-key=" +
           process.env.REACT_APP_API_KEY
         );
-
-      case "Polemic":
-        console.log(" make polemic");
+      case "Polemic":     
         return (
           "https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=" +
           process.env.REACT_APP_API_KEY
@@ -51,6 +51,10 @@ class NyTimes extends React.Component {
         return "Oopsy";
     }
   };
+  /**
+   * Execute une requête vers les BDD de NY Times et récupère les données dans state
+   * @param {*} category type de l'article 
+   */
   loadArticles = (category) => {
     let link = this.makeApiLink(category);
     fetch(link)
@@ -71,9 +75,14 @@ class NyTimes extends React.Component {
         }
       );
   };
-  handleItemClick = (e, { name }) => {
-    this.setState({ activeItem: name });
-  };
+
+  /**
+   * Vu que selon le type de l'article, la structure de l'objet est différent,
+   * obligé de faire au cas par cas pour chaque type.
+   * 
+   * @param {*} element Objet d'un article, peut être différent selon le type de requête vers l'API
+   * @returns <Image ...> Une balise image contenant une image de element
+   */
   rightPathToImage = (element) => {
     switch (this.state.activeItem) {
       case "Recent":
@@ -97,7 +106,7 @@ class NyTimes extends React.Component {
     }
   };
   render() {
-    const { error, isLoaded, listArticles, activeItem } = this.state;
+    const {listArticles, activeItem } = this.state;
     return (
       <Menu fluid vertical>
         <Menu.Header>
