@@ -20,35 +20,38 @@ class NyTimes extends React.Component {
   }
 
   componentDidMount() {
-    this.loadArticles("recent");
+    this.loadArticles(this.state.activeItem);
   }
   makeApiLink = (category) => {
+    this.setState({ activeItem: category });
     switch (category) {
-      case "popular":
+      case "Popular":
+        console.log(" make popular");
         return (
           "https://api.nytimes.com/svc/mostpopular/v2/viewed/7.json?api-key=" +
           process.env.REACT_APP_API_KEY
         );
 
-      case "recent":
+      case "Recent":
+        console.log(" make recent");
         return (
           "https://api.nytimes.com/svc/news/v3/content/nyt/world.json?api-key=" +
           process.env.REACT_APP_API_KEY
         );
 
-      case "polemic":
+      case "Polemic":
+        console.log(" make polemic");
         return (
           "https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=" +
           process.env.REACT_APP_API_KEY
         );
 
       default:
-        console.log("Unknow category");
+        console.log("makeApiLink() => Unknow category");
         return "Oopsy";
     }
   };
   loadArticles = (category) => {
-    console.log("loadArticles() : " + category);
     let link = this.makeApiLink(category);
     fetch(link)
       .then((res) => res.json())
@@ -68,10 +71,33 @@ class NyTimes extends React.Component {
         }
       );
   };
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name });
+  };
+  rightPathToImage = (element) => {
+    switch (this.state.activeItem) {
+      case "Recent":
+        if(element.multimedia && element.multimedia[0]) {
+          return <Image avatar src={element.multimedia[0].url} />;
+        }else{
+          return <Image avatar src={require("../asset/image-not-found.jpg")} />;
+        }
+      case "Popular": //fall-through
+      case "Polemic":
+        if (element.media && element.media[0]) {
+          return (
+            <Image avatar src={element["media"][0]["media-metadata"][0].url} />
+          );
+        } else {
+          return <Image avatar src={require("../asset/image-not-found.jpg")} />;
+        }
+      default:
+        console.log("rightPathToImage() => can't read state");
+        return "Oopsy";
+    }
+  };
   render() {
     const { error, isLoaded, listArticles, activeItem } = this.state;
-
     return (
       <Menu fluid vertical>
         <Menu.Header>
@@ -94,45 +120,49 @@ class NyTimes extends React.Component {
         <Menu.Item>
           <Input icon="search" placeholder="Search..." />
         </Menu.Item>
-        <div style={{textAlign:'center'}}>
-        <Menu  pointing compact size="massive">
-          <Menu.Item
-            name="Recent"
-            active={activeItem === "Recent"}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
-            name="Popular"
-            active={activeItem === "Popular"}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
-            name="Polemic"
-            active={activeItem === "Polemic"}
-            onClick={this.handleItemClick}
-          />
-        </Menu>
+        <div style={{ textAlign: "center" }}>
+          <Menu size="massive" pointing compact>
+            <Menu.Item
+              name="Recent"
+              active={activeItem === "Recent"}
+              onClick={() => this.loadArticles("Recent")}
+            />
+            <Menu.Item
+              name="Popular"
+              active={activeItem === "Popular"}
+              onClick={() => this.loadArticles("Popular")}
+            />
+            <Menu.Item
+              name="Polemic"
+              active={activeItem === "Polemic"}
+              onClick={() => this.loadArticles("Polemic")}
+            />
+          </Menu>
         </div>
-        
 
         <Divider />
-        <Container style={{maxHeight: 300, overflow: 'auto'}}>
-          {console.log("NUmber " + listArticles.length)}
+        <Container style={{ maxHeight: 400, overflow: "auto" }}>
           <List>
-            {listArticles.map((element,index) => (
+            {listArticles.map((element, index) => (
               <List.Item key={index}>
-                <a href={element.url}>
+                <a href={element["url"]}>
                   <List.Content>
                     <List.Header>
-                      <Image avatar src={require("../asset/LogoNYTimes.png")} />
+                      {/* <Image avatar src={element.multimedia[0].url} /> */}
+                      {this.rightPathToImage(element)}
                       {element.title}
                     </List.Header>
-                    <List.Description>{element.abstract}</List.Description>
+                    <List.Description>
+                      {element.abstract ? (
+                        element.abstract
+                      ) : (
+                        <i>No description</i>
+                      )}
+                    </List.Description>
                   </List.Content>
                 </a>
                 <Divider />
               </List.Item>
-              
             ))}
           </List>
         </Container>
