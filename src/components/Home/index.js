@@ -4,7 +4,7 @@ import React from "react";
 import Tags from "./Tags";
 import agent from "../../agent";
 import { connect } from "react-redux";
-import NyTimes from "./newYorkTime";
+import NyTimes from "./MenuNyTimes";
 import 'semantic-ui-css/semantic.min.css'
 
 import {

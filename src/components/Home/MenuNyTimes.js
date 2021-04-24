@@ -5,7 +5,6 @@ import {
   Menu,
   Input,
   List,
-  Grid,
   Container,
 } from "semantic-ui-react";
 class NyTimes extends React.Component {
@@ -157,7 +156,6 @@ class NyTimes extends React.Component {
                 <a href={element["url"]}>
                   <List.Content>
                     <List.Header>
-                      {/* <Image avatar src={element.multimedia[0].url} /> */}
                       {this.rightPathToImage(element)}
                       {element.title}
                     </List.Header>
