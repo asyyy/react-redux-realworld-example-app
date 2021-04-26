@@ -11,18 +11,16 @@ class NyTimes extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
-      isLoaded: false,
       listArticles: [],
       activeItem: "Recent",
     };
   }
-  
+
   componentDidMount() {
     this.loadArticles(this.state.activeItem);
   }
   /**
-   * 
+   *
    * @param {*} category type de l'articles
    * @returns String, le lien de l'api vers le NY Times selon le type de l'article
    */
@@ -34,12 +32,12 @@ class NyTimes extends React.Component {
           "https://api.nytimes.com/svc/mostpopular/v2/viewed/7.json?api-key=" +
           process.env.REACT_APP_API_KEY
         );
-      case "Recent":      
+      case "Recent":
         return (
           "https://api.nytimes.com/svc/news/v3/content/nyt/world.json?api-key=" +
           process.env.REACT_APP_API_KEY
         );
-      case "Polemic":     
+      case "Polemic":
         return (
           "https://api.nytimes.com/svc/mostpopular/v2/emailed/7.json?api-key=" +
           process.env.REACT_APP_API_KEY
@@ -52,42 +50,33 @@ class NyTimes extends React.Component {
   };
   /**
    * Execute une requête vers les BDD de NY Times et récupère les données dans state
-   * @param {*} category type de l'article 
+   * @param {*} category type de l'article
    */
   loadArticles = (category) => {
     let link = this.makeApiLink(category);
     fetch(link)
       .then((res) => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            listArticles: result.results,
-          });
-        },
-        (error) => {
-          console.log(error.status);
-          this.setState({
-            isLoaded: true,
-            error,
-          });
-        }
-      );
+      .then((result) => {
+        this.setState({
+          isLoaded: true,
+          listArticles: result.results,
+        });
+      });
   };
 
   /**
    * Vu que selon le type de l'article, la structure de l'objet est différent,
    * obligé de faire au cas par cas pour chaque type.
-   * 
+   *
    * @param {*} element Objet d'un article, peut être différent selon le type de requête vers l'API
    * @returns <Image ...> Une balise image contenant une image de element
    */
   rightPathToImage = (element) => {
     switch (this.state.activeItem) {
       case "Recent":
-        if(element.multimedia && element.multimedia[0]) {
+        if (element.multimedia && element.multimedia[0]) {
           return <Image avatar src={element.multimedia[0].url} />;
-        }else{
+        } else {
           return <Image avatar src={require("../asset/image-not-found.jpg")} />;
         }
       case "Popular": //fall-through
@@ -105,7 +94,7 @@ class NyTimes extends React.Component {
     }
   };
   render() {
-    const {listArticles, activeItem } = this.state;
+    const { listArticles, activeItem } = this.state;
     return (
       <Menu fluid vertical>
         <Menu.Header>
@@ -114,7 +103,6 @@ class NyTimes extends React.Component {
             size="tiny"
             verticalAlign="middle"
           />
-
           <span
             style={{
               fontFamily: "Helvatica",
